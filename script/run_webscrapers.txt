@@ -1,0 +1,2 @@
+scrapy crawl greta -O greta.json -a 
+
