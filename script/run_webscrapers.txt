@@ -1,2 +1,4 @@
-scrapy crawl greta -O greta.json -a 
+cd webscrapers
+scrapy runspider greta.py -O greta.json
+use -a falg for variables or command line arguments
 
