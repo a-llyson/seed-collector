@@ -43,8 +43,8 @@ class gretaSpider(scrapy.Spider):
             if "seeds" not in seed_qty and " g" not in seed_qty:
                 seed_qty = "N/A"
 
-            # replace unicode with ' and é and removes "organic" and whitespace
-            seed = seed.replace('\u2019', '\'').replace('\u00e9', 'é').replace('- Organic', '').strip() 
+            # replace unicode with ' and removes "organic" and whitespace
+            seed = seed.replace('\u2019', '\'').replace('- Organic', '').replace('-Organic', '').strip() 
 
             # remove $, CAD and whitespace
             price = price.replace('$', '').replace('CAD', '').strip()
