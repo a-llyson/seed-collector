@@ -26,31 +26,30 @@ class gretaSpider(scrapy.Spider):
 
 
     def product_parse(self, response):
-        # for block in response.xpath('//*[@id="ProductInfo-template--15861094482164__main"]'):
-            # gets seed name
-            seed = response.css('h1.product__title::text').get() 
+        # gets seed name
+        seed = response.css('h1.product__title::text').get() 
 
-            # gets price 
-            price = response.css('span.price-item--regular::text').get()
+        # gets price 
+        price = response.css('span.price-item--regular::text').get()
 
-            # gets seed quantity (the first label)
-            seed_qty = response.css('label::text').get()
+        # gets seed quantity (the first label)
+        seed_qty = response.css('label::text').get()
 
-            # If seed quantity is not given
-            if "seeds" not in seed_qty and " g" not in seed_qty:
-                seed_qty = "N/A"
+        # If seed quantity is not given
+        if "seeds" not in seed_qty and " g" not in seed_qty:
+            seed_qty = "N/A"
 
-            # replace unicode with ' and removes "organic" and whitespace
-            seed = seed.replace('\u2019', '\'').replace('- Organic', '').replace('-Organic', '').strip() 
+        # replace unicode with ' and removes "organic" and whitespace
+        seed = seed.replace('\u2019', '\'').replace('- Organic', '').replace('-Organic', '').strip() 
 
-            # remove $, CAD and whitespace
-            price = price.replace('$', '').replace('CAD', '').strip()
-            
-            # remove \n, ~, "seeds" and whitespace
-            seed_qty = seed_qty.replace('\n', '').replace('~', '').replace('seeds', '').strip()
+        # remove $, CAD and whitespace
+        price = price.replace('$', '').replace('CAD', '').strip()
+        
+        # remove \n, ~, "seeds" and whitespace
+        seed_qty = seed_qty.replace('\n', '').replace('~', '').replace('seeds', '').strip()
 
-            yield {
-                'seed':  seed,
-                'price': price,
-                'qty': seed_qty,
-            }
+        yield {
+            'seed':  seed,
+            'price': price,
+            'qty': seed_qty,
+        }
