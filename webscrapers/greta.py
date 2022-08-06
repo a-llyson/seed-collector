@@ -20,7 +20,8 @@ class gretaSpider(scrapy.Spider):
         
         # goes to next page 
         next_arrow = response.css('.pagination__item--prev::attr(href)')
-        yield from response.follow_all(next_arrow, self.parse)
+        if next_arrow is not None:
+            yield from response.follow_all(next_arrow, self.parse)
 
 
     def product_parse(self, response):
@@ -35,7 +36,7 @@ class gretaSpider(scrapy.Spider):
             seed_qty = block.css('label::text').get()
 
             # If not seed quantity is not given
-            if "seeds" not in seed_qty:
+            if "seeds" and "g" not in seed_qty:
                 seed_qty = "N/A"
 
             # replace unicode with ' and removes "organic" and whitespace
