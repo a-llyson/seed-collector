@@ -3,25 +3,27 @@ import scrapy
 class gaiaSpider(scrapy.Spider):
     name = "gaia"
 
-    start_urls = [
-        # "https://gaiaorganics.ca/shop/"
-        "https://gaiaorganics.ca/shop/page/71/"
-        ]
+    start_urls = ["https://gaiaorganics.ca/shop/"]
 
     # either get seed names from each individual product page
     def parse(self, response):
         item_num = 1
         # all seeds (24) from one page 
-        while item_num <= 25:
-            print(item_num)
-            for seed in response.xpath(f'/html/body/div[2]/section/div/div[1]/ul/li[{item_num}]/a'):
-                
-                product_page_css = seed.css('a::attr(href)') # a tags get href selected automatically
+        while item_num <= 25: 
+            xpath = f'/html/body/div[2]/section/div/div[1]/ul/li[{item_num}]/a'
+            if not (response.xpath(xpath)):
+                xpath = f'/html/body/div[1]/section/div/div[1]/ul/li[{item_num}]/a'
 
-                yield from response.follow_all(product_page_css, self.product_parse)
+            seed=response.xpath(xpath)[0]
+
+            product_page_css = seed.css('a::attr(href)') # a tags get href selected automatically
+
+            yield from response.follow_all(product_page_css, self.product_parse)
                 
             item_num += 1
 
+
+        # scrapy throws error for page 72 but everything on page 72 is processed
         # goes to next page 
         next_arrow = response.css('.next::attr(href)')
         if next_arrow:
@@ -36,10 +38,13 @@ class gaiaSpider(scrapy.Spider):
         price = response.css('p.price span bdi::text').get()
 
         # gets seed quantity (smallest)
-        seed_qty = response.css('option::text')[1].get()
+        if response.css('option::text'):
+            seed_qty = response.css('option::text')[1].get()
+        else:
+            seed_qty = "OOS"
 
         # If seed quantity is not given
-        if "seeds" not in seed_qty and " g" not in seed_qty:
+        if "seeds" not in seed_qty and " g" not in seed_qty and "OOS" not in seed_qty:
             seed_qty = "N/A"
 
         # replace unicode with ' and removes whitespace
@@ -48,11 +53,16 @@ class gaiaSpider(scrapy.Spider):
         # remove $, CAD and whitespace
         # price = price.replace('$', '').replace('CAD', '').strip()
         
-        # remove \n, ~, "seeds" and whitespace
-        seed_qty = seed_qty[:11].lower().replace('seeds', '').replace('-', '').strip()
+        # remove \n, ~, $, "seeds" and whitespace
+        seed_qty = seed_qty[:11].lower().replace('seeds', '').replace('-', '').replace('$', '').strip()
 
-        yield {
-            'seed':  seed,
-            'price': price,
-            'qty': seed_qty,
-        }
+        # to filter out the live plants for pickup at their ottawa location?
+        in_store = response.xpath('/html/body/div[2]/section/div[1]/div[2]/div[2]/div[1]/p[6]/span')
+        in_store_only = in_store.css('span::text').get()
+
+        if not in_store_only:
+            yield {
+                'seed':  seed,
+                'price': price,
+                'qty': seed_qty,
+            }

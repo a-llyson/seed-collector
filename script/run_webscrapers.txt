@@ -4,7 +4,7 @@ start activate
 cd webscrapers
 scrapy runspider greta.py -O ./results/greta.jsonl --logfile logs.txt -s CONCURRENT_REQUESTS=64 -s CONCURRENT_REQUESTS_PER_DOMAIN=16 -s FEED_EXPORTERS=jsonlines
 
-scrapy runspider greta.py -O ./results/temp.json --logfile logs.txt
+scrapy runspider greta.py -O ./results/greta.json --logfile logs.txt
 
 use -a flag for variables or command line arguments
 
