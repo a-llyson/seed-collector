@@ -56,11 +56,9 @@ class gaiaSpider(scrapy.Spider):
         # remove \n, ~, $, "seeds" and whitespace
         seed_qty = seed_qty[:11].lower().replace('seeds', '').replace('-', '').replace('$', '').strip()
 
-        # to filter out the live plants for pickup at their ottawa location?
-        in_store = response.xpath('/html/body/div[2]/section/div[1]/div[2]/div[2]/div[1]/p[6]/span')
-        in_store_only = in_store.css('span::text').get()
+        # to filter out the live plants for pickup at their ottawa location
 
-        if not in_store_only:
+        if price:
             yield {
                 'seed':  seed,
                 'price': price,
