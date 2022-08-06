@@ -2,13 +2,10 @@ import scrapy
 
 class gretaSpider(scrapy.Spider):
     name = "greta"
-
-    # download_delay = 1
     
-
     start_urls = ["https://www.seeds-organic.com/collections/all"]
 
-    # either get seed names from /all page or from each individual product page?
+    # either get seed names from each individual product page
     def parse(self, response):
         item_num = 1
 
@@ -29,15 +26,15 @@ class gretaSpider(scrapy.Spider):
 
 
     def product_parse(self, response):
-        for block in response.xpath('//*[@id="ProductInfo-template--15861094482164__main"]'):
-            # gets title
-            seed = block.css('h1.product__title::text').get() 
+        # for block in response.xpath('//*[@id="ProductInfo-template--15861094482164__main"]'):
+            # gets seed name
+            seed = response.css('h1.product__title::text').get() 
 
             # gets price 
-            price = block.css('span.price-item--regular::text').get()
+            price = response.css('span.price-item--regular::text').get()
 
             # gets seed quantity (the first label)
-            seed_qty = block.css('label::text').get()
+            seed_qty = response.css('label::text').get()
 
             # If seed quantity is not given
             if "seeds" not in seed_qty and " g" not in seed_qty:

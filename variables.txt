@@ -1,0 +1,10 @@
+all seeds page:
+- start url
+- number of items per page
+- url to product page
+- next arrow
+
+on product page:
+- product name
+- price
+- seed quantity
