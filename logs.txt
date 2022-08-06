@@ -1,0 +1,2 @@
+2022-08-06 11:10:24 [scrapy.utils.log] INFO: Scrapy 2.6.2 started (bot: scrapybot)
+2022-08-06 11:10:24 [scrapy.utils.log] INFO: Versions: lxml 4.9.1.0, libxml2 2.9.12, cssselect 1.1.0, parsel 1.6.0, w3lib 1.22.0, Twisted 22.4.0, Python 3.10.5 (tags/v3.10.5:f377153, Jun  6 2022, 16:14:13) [MSC v.1929 64 bit (AMD64)], pyOpenSSL 22.0.0 (OpenSSL 3.0.5 5 Jul 2022), cryptography 37.0.4, Platform Windows-10-10.0.19044-SP0

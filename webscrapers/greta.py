@@ -2,6 +2,10 @@ import scrapy
 
 class gretaSpider(scrapy.Spider):
     name = "greta"
+
+    # download_delay = 1
+    
+
     start_urls = ["https://www.seeds-organic.com/collections/all"]
 
     # either get seed names from /all page or from each individual product page?
@@ -16,11 +20,11 @@ class gretaSpider(scrapy.Spider):
 
                 yield from response.follow_all(product_page_css, self.product_parse)
                 
-                item_num += 1
+            item_num += 1
         
         # goes to next page 
         next_arrow = response.css('.pagination__item--prev::attr(href)')
-        if next_arrow is not None:
+        if next_arrow:
             yield from response.follow_all(next_arrow, self.parse)
 
 
@@ -35,12 +39,12 @@ class gretaSpider(scrapy.Spider):
             # gets seed quantity (the first label)
             seed_qty = block.css('label::text').get()
 
-            # If not seed quantity is not given
-            if "seeds" and "g" not in seed_qty:
+            # If seed quantity is not given
+            if "seeds" not in seed_qty and " g" not in seed_qty:
                 seed_qty = "N/A"
 
-            # replace unicode with ' and removes "organic" and whitespace
-            seed = seed.replace('\u2019', '\'').replace('- Organic', '').strip() 
+            # replace unicode with ' and é and removes "organic" and whitespace
+            seed = seed.replace('\u2019', '\'').replace('\u00e9', 'é').replace('- Organic', '').strip() 
 
             # remove $, CAD and whitespace
             price = price.replace('$', '').replace('CAD', '').strip()
