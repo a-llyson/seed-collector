@@ -7,23 +7,21 @@ class gretaSpider(scrapy.Spider):
     # either get seed names from /all page or from each individual product page?
     def parse(self, response):
         item_num = 1
+
+        # all seeds (24) from one page 
         while item_num <= 24:
-            for seed_name in response.xpath(f'/html/body/main/div[2]/div/div[2]/div/ul/li[{item_num}]/div/div/div[2]/div[1]/h3/a'):
+            for seed in response.xpath(f'/html/body/main/div[2]/div/div[2]/div/ul/li[{item_num}]/div/div/div[2]/div[1]/h3/a'):
                 
-                # seed = seed_name.css('::text').get() # returns '\n        seed_name\n      '
-                # seed = seed.replace('\n', '') # strips \n from name, could also strip -organic if wanted)
-                # seed = seed.replace('\u2019', '\'') # replace unicode with right single quotation mark
-                # seed = seed.strip() # strips whitespace
-                
-                product_page_css = seed_name.css('a::attr(href)') # a tags get href selected automatically
+                product_page_css = seed.css('a::attr(href)') # a tags get href selected automatically
 
                 yield from response.follow_all(product_page_css, self.product_parse)
                 
-                # or if new page is loaded, then set it back to 0
-                if item_num > 24:
-                    break
-                else:
-                    item_num += 1
+                item_num += 1
+        
+        # goes to next page 
+        next_arrow = response.css('.pagination__item--prev::attr(href)')
+        yield from response.follow_all(next_arrow, self.parse)
+
 
     def product_parse(self, response):
         for block in response.xpath('//*[@id="ProductInfo-template--15861094482164__main"]'):
