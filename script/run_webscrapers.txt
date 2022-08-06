@@ -2,6 +2,6 @@ cd venv/Scripts
 start activate
 
 cd webscrapers
-scrapy runspider greta.py -O /results/greta.json
+scrapy runspider greta.py -O ./results/greta.json
 use -a flag for variables or command line arguments
 
