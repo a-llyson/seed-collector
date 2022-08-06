@@ -39,25 +39,30 @@ class gaiaSpider(scrapy.Spider):
 
         # gets seed quantity (smallest)
         if response.css('option::text'):
-            seed_qty = response.css('option::text')[1].get()
+            seed_qty = response.css('option::text')[1].get().lower()
         else:
             seed_qty = "OOS"
 
         # If seed quantity is not given
-        if "seeds" not in seed_qty and " g" not in seed_qty and "OOS" not in seed_qty:
-            seed_qty = "N/A"
+        # if "seed" not in seed_qty and " g" not in seed_qty and "OOS" not in seed_qty and "kg" not in seed_qty and "bulb" not in seed_qty and "g" not in seed_qty:
+        #     seed_qty = "N/A"
 
         # replace unicode with ' and removes whitespace
         seed = seed.replace('\u2019', '\'').strip() 
 
-        # remove $, CAD and whitespace
-        # price = price.replace('$', '').replace('CAD', '').strip()
-        
+        if "kg" in seed_qty:
+            seed_qty = seed_qty[:5]
+        elif "bulb" in seed_qty:
+            seed_qty = seed_qty[4:]
+        elif "g" in seed_qty:
+            seed_qty = seed_qty[:5]
+        else:
+            seed_qty = seed_qty[:11]
+
         # remove \n, ~, $, "seeds" and whitespace
-        seed_qty = seed_qty[:11].lower().replace('seeds', '').replace('-', '').replace('$', '').strip()
+        seed_qty = seed_qty.replace('seeds', '').replace('-', '').replace('$', '').strip()
 
         # to filter out the live plants for pickup at their ottawa location
-
         if price:
             yield {
                 'seed':  seed,
