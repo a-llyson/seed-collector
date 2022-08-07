@@ -15,3 +15,5 @@ scrapy runspider gaia.py -O ./results/gaia.json --logfile logs.txt
 scrapy runspider heritage.py -O ./results/heritage.json
 
 scrapy runspider osc.py -O ./results/osc.json
+
+scrapy runspider hawthorn.py -O ./results/hawthorn.json
