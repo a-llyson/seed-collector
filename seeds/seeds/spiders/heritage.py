@@ -53,7 +53,7 @@ class heritageSpider(scrapy.Spider):
             seed_qty = "N/A"
         
 
-        # gets seed name and adds back \ and removes whitespace
+        # gets seed name and adds back ' and removes whitespace
         seed = seed.rsplit('-', 1)[0].replace('\u2019', '\'').replace('\u2018', '\'').strip()
 
         # remove $, CAD and whitespace

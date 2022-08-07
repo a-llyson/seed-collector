@@ -13,3 +13,5 @@ scrapy shell "url" for scrapy shell
 scrapy runspider gaia.py -O ./results/gaia.json --logfile logs.txt
 
 scrapy runspider heritage.py -O ./results/heritage.json
+
+scrapy runspider osc.py -O ./results/osc.json
