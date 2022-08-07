@@ -45,8 +45,8 @@ class gretaSpider(scrapy.Spider):
         # remove $, CAD and whitespace
         price = price.replace('$', '').replace('CAD', '').strip()
         
-        # remove \n, ~, "seeds" and whitespace
-        seed_qty = seed_qty.replace('\n', '').replace('~', '').replace('seeds', '').strip()
+        # remove ~, "seeds" and whitespace
+        seed_qty = seed_qty.replace('~', '').replace('seeds', '').strip()
 
         yield {
             'seed':  seed,

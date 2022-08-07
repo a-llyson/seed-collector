@@ -8,7 +8,8 @@ class gaiaSpider(scrapy.Spider):
     # either get seed names from each individual product page
     def parse(self, response):
         item_num = 1
-        # all seeds (24) from one page 
+        
+        # all seeds (25) from one page 
         while item_num <= 25: 
             xpath = f'/html/body/div[2]/section/div/div[1]/ul/li[{item_num}]/a'
             if not (response.xpath(xpath)):
