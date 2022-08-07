@@ -56,8 +56,8 @@ class oscSpider(scrapy.Spider):
         seed_qty = response.css('p').re("\d+\D+seeds/pkt")
         if seed_qty:
             seed_qty = seed_qty[0]
-        elif response.css('p').re("\d+\D+seeds"):
-            seed_qty = seed_qty[0]
+        elif response.css('p').re("\d+\D+seed"):
+            seed_qty = response.css('p').re("\d+\D+seed")[0]
         else:
             seed_qty = "N/A"
 
