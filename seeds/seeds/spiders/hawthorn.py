@@ -1,8 +1,8 @@
 import scrapy
 import re as regex
 
-class oscSpider(scrapy.Spider):
-    name = "osc"
+class hawthornSpider(scrapy.Spider):
+    name = "hawthorn"
 
     start_urls = [
         "https://hawthornfarm.ca/pages/vegetables",

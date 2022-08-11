@@ -62,9 +62,12 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'seeds.pipelines.SeedsPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'seeds.pipeline.MongoPipeline': 300,
+}
+
+MONGO_URI = 'mongodb://localhost:27017'
+MONGO_DATABASE = 'seed-storage'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
