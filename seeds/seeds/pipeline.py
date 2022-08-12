@@ -23,6 +23,8 @@ class MongoPipeline():
         self.db = self.client[self.mongo_db]
         logging.info(f"db? {self.db}")
         print(self.db.command("ismaster"))
+
+
     
     def close_spider(self, spider):
         self.client.close()
@@ -37,4 +39,5 @@ class MongoPipeline():
         
         logging.info("processed item")
         print(res)
+        print(self.db[self.collection_name].find_one())
         return item
