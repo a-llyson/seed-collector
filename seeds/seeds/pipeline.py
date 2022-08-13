@@ -23,6 +23,10 @@ class MongoPipeline():
         self.db = self.client[self.mongo_db]
         logging.info(f"db? {self.db}")
         print(self.db.command("ismaster"))
+        try:
+            self.client.admin.command('ping')
+        except ConnectionFailure:
+            print("Server not available")
 
 
     
