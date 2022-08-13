@@ -33,7 +33,7 @@ class gretaSpider(scrapy.Spider):
         price = response.css('span.price-item--regular::text').get()
 
         # gets seed quantity (the first label)
-        seed_qty = response.css('label::text').get()
+        seed_qty = response.css('#template--15861094482164__main-1-0').xpath('@value').get()
 
         # If seed quantity is not given
         if "seeds" not in seed_qty and " g" not in seed_qty:

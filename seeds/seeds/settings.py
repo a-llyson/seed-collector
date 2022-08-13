@@ -7,6 +7,11 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 BOT_NAME = 'seeds'
 
 SPIDER_MODULES = ['seeds.spiders']
@@ -66,7 +71,7 @@ ITEM_PIPELINES = {
    'seeds.pipeline.MongoPipeline': 300,
 }
 
-MONGO_URI = 'mongodb://localhost:27017'
+MONGO_URI = os.getenv("MONGO_DB")
 MONGO_DATABASE = 'seed-storage'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
