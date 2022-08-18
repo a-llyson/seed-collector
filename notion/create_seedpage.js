@@ -8,24 +8,46 @@ const { Client } = require('@notionhq/client');
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
 const dbName = "seed-storage"
-MongoClient.connect(url, function(err, client) {
+collection_names = []
 
+// MongoClient.connect(url, function(err, client) {
+//     const db = client.db(dbName)
+//     db.listCollections().toArray(function(err, items) {
+//         // gets names of all collections
+//         for (let i = 0; i < items.length; i++) {
+//             collection_names.push(items[i]["name"]);
+//         }
+//         client.close();
+//    });
+// })
 
-    const db = client.db("seed-storage")
+// Returns list of collection names
+async function getCollectionNames() {
+    collection_names = []
+    await dbClient.connect().catch(err=>console.log(err));
+    const db = dbClient.db(dbName);
+    var collection_name_array = await db.listCollections().toArray();
+    const length_array = collection_name_array.length
+    for (let i=0; i <length_array; i++) {
+        collection_names[i] = collection_name_array[i]["name"];
+    }
+    return collection_names;
+}
 
-    db.listCollections().toArray(function(err, items) {
-        // gets names of all collections
-        for (let i = 0; i < items.length; i++) {
-            console.log(items[i]["name"])
-        }
-           client.close();
-   });
+// Returns an array of objects
+async function getCollectionData(colName) {
+    await dbClient.connect().catch(err=>console.log(err));
+    const collection = db.collection(colName);
+    const findResult = await collection.find({}).toArray();
+ 
+    return findResult;
+}
 
-   
-})
-
-   
-
+getCollectionNames()
+  .then(console.log)
+  .catch(console.error)
+  .finally(() => dbClient.close());
+  
 /*
 (async () => {
   const response = await notion.pages.create({
