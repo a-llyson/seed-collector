@@ -2,22 +2,31 @@ require('dotenv').config();
 
 var MongoClient = require('mongodb').MongoClient;
 var url = process.env.MONGO_DB;
-console.log(url)
-const { Client } = require('@notionhq/client');
+const dbClient = new MongoClient(url);
 
+const { Client } = require('@notionhq/client');
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
+const dbName = "seed-storage"
+MongoClient.connect(url, function(err, client) {
 
-MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db("seeds");
-    dbo.collection("seed-storage").findOne({}, function(err, result) {
-      if (err) throw err;
-      console.log(result.name);
-      db.close();
-    });
-  }); 
 
+    const db = client.db("seed-storage")
+
+    db.listCollections().toArray(function(err, items) {
+        // gets names of all collections
+        for (let i = 0; i < items.length; i++) {
+            console.log(items[i]["name"])
+        }
+           client.close();
+   });
+
+   
+})
+
+   
+
+/*
 (async () => {
   const response = await notion.pages.create({
     "cover": {
@@ -32,7 +41,7 @@ MongoClient.connect(url, function(err, db) {
     },
     "parent": {
         "type": "database_id",
-        "database_id": "d9824bdc-8445-4327-be8b-5b47500af6ce"
+        "database_id": process.env.NOTION_DATABASE_ID
     },
     "properties": {
         "Name": {
@@ -93,3 +102,4 @@ MongoClient.connect(url, function(err, db) {
 });
   console.log(response);
 })();
+*/
