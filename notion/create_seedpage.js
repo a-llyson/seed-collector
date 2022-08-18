@@ -2,13 +2,12 @@ require('dotenv').config();
 
 var MongoClient = require('mongodb').MongoClient;
 var url = process.env.MONGO_DB;
-const dbClient = new MongoClient(url);
+const db_client = new MongoClient(url);
 
 const { Client } = require('@notionhq/client');
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
-const dbName = "seed-storage"
-collection_names = []
+const db_name = "seed-storage"
 
 // MongoClient.connect(url, function(err, client) {
 //     const db = client.db(dbName)
@@ -22,10 +21,10 @@ collection_names = []
 // })
 
 // Returns list of collection names
-async function getCollectionNames() {
+async function get_collection_names() {
     collection_names = []
-    await dbClient.connect().catch(err=>console.log(err));
-    const db = dbClient.db(dbName);
+    await db_client.connect().catch(err=>console.log(err));
+    const db = db_client.db(db_name);
     var collection_name_array = await db.listCollections().toArray();
     const length_array = collection_name_array.length
     for (let i=0; i <length_array; i++) {
@@ -34,19 +33,22 @@ async function getCollectionNames() {
     return collection_names;
 }
 
-// Returns an array of objects
-async function getCollectionData(colName) {
-    await dbClient.connect().catch(err=>console.log(err));
-    const collection = db.collection(colName);
-    const findResult = await collection.find({}).toArray();
- 
-    return findResult;
+// Returns an array of seeds
+async function get_collection_data(col_name) {
+    await db_client.connect().catch(err=>console.log(err));
+    const collection = db_client.db(db_name).collection(col_name);
+    const seed_array = await collection.find({}).toArray();
+    return seed_array;
 }
 
-getCollectionNames()
-  .then(console.log)
-  .catch(console.error)
-  .finally(() => dbClient.close());
+get_collection_names()  
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => dbClient.close());
+get_collection_data("heritage")  
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => dbClient.close());
   
 /*
 (async () => {
