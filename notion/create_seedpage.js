@@ -44,11 +44,11 @@ async function get_collection_data(col_name) {
 get_collection_names()  
     .then(console.log)
     .catch(console.error)
-    .finally(() => dbClient.close());
+    .finally(() => db_client.close());
 get_collection_data("heritage")  
     .then(console.log)
     .catch(console.error)
-    .finally(() => dbClient.close());
+    .finally(() => db_client.close());
   
 /*
 (async () => {
