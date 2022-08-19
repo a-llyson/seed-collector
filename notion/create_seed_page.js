@@ -10,13 +10,13 @@ const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const db_name = "seed-storage"
 
 const seed_emojis = {
-    "green": "🥬",
-    "tomato": "🍅",
-    "cucumber": "🥒",
-    "eggplant": "🍆",
-    "herb": "🌿",
-    "fruit": "🍎",
-    "strawberry": "🍓",
+    "Green": "🥬",
+    "Tomato": "🍅",
+    "Cucumber": "🥒",
+    "Eggplant": "🍆",
+    "Herb": "🌿",
+    "Fruit": "🍎",
+    "Strawberry": "🍓",
     // "rest": "🌱",
 }
 
