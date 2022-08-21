@@ -56,4 +56,5 @@ class hawthornSpider(scrapy.Spider):
             'seed':  seed,
             'price': price,
             'qty': seed_qty,
+            'store': 'hawthorn'
         }

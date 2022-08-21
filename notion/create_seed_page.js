@@ -136,5 +136,9 @@ async function query_db() {
     }
     //console.log(Object.entries(seed_emojis)[0][0])
 }
+// add collection/website (where it comes from), make emoji[0] first letter uppercase,
+// add more vegetable support,  do quantity/price,  
 
+// for scrapers, save url to item object and maybe website name
+// maybe for tags i should make the tag the website ??
 query_db();

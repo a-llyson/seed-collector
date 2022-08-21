@@ -67,4 +67,5 @@ class heritageSpider(scrapy.Spider):
             'seed':  seed,
             'price': price,
             'qty': seed_qty,
+            'store': 'heritage harvest seeds'
         }
