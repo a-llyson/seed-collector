@@ -79,10 +79,15 @@ async function add_seed(emoji, name, price, quantity, select_type, url, store) {
             "number": price
         },
         "Quantity": {
-            "number": quantity
-        },
-        "Price Per Seed": {
-            "number": price/quantity // in dollars 
+            "rich_text": [
+                {
+                "type": "text",
+                "text": {
+                    "content": quantity
+                }
+            }
+            ]
+            
         },
         "Type": {
             "select": {
@@ -99,7 +104,7 @@ async function add_seed(emoji, name, price, quantity, select_type, url, store) {
         },
     },
 });
-  console.log(response);
+//   console.log(response);
 };
 
  function get_emoji(seed) {
@@ -155,9 +160,6 @@ async function query_db() {
         }
 
         quantity = data[i]["qty"]
-        if (typeof quantity == "string") {
-            quantity = parseFloat(quantity);
-        }
 
         url = data[i]["url"];
         store = data[i]["store"];
