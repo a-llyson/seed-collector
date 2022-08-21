@@ -7,26 +7,36 @@ const db_client = new MongoClient(url);
 const { Client } = require('@notionhq/client');
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
-const db_name = "seed-storage"
+const DB_NAME = "seed-storage"
 
-const seed_emojis = {
-    "Green": "🥬",
-    "Tomato": "🍅",
+const SEED_EMOJIS = {
+    "Bean": "🎋",
+    "Carrot": "🥕",
     "Cucumber": "🥒",
     "Eggplant": "🍆",
-    "Herb": "🌿",
     "Fruit": "🍎",
+    "Green": "🥬",
+    "Herb": "🌿",
     "Strawberry": "🍓",
-    // "rest": "🌱",
-}
+    "Tomato": "🍅",
+    "Pea": "🟢",
+    "Pepper": "🫑",
+    "Pumpkin": "🎃",
+};
+
+const HERBS = ["anise", "basil", "bay leaf", "bergamot", "borage", "cumin", "cardamom", "catnip", "chervil", "chicory", "cilantro", "dill", "fennel", "ginger", "green onion", "horseradish", "lavender", "lemon balm", "lemon grass", "licorice", "lovage", "mint", "nutmeg", "oregano", "paprika", "parsley", "peppermint", "poppy seed", "rosemary", "saffron", "sage", "savory", "sesame", "sorrel", "tarragon", "thyme", "turmeric", "vanilla", "wasabi"];
+const HERBS_LEN = HERBS.length;
+
+const LEAFY_GREENS = ["artichoke", "arugula", "asian greens", "astro", "brocolli", "bok choi", "bok choy", "cabbage", "celery", "collard greens", "kale", "lettuce", "mustard greens", "pac choi", "pac choy", "rapini", "romaine", "spinach", "swiss chard", "watercress"];
+const LEAFY_GREENS_LEN = LEAFY_GREENS.length;
 
 // Returns list of collection names
 async function get_collection_names() {
     var collection_names = []
     await db_client.connect().catch(err=>console.log(err));
-    const db = db_client.db(db_name);
+    const db = db_client.db(DB_NAME);
     const collection_name_array = await db.listCollections().toArray();
-    const length_array = collection_name_array.length
+    const length_array = collection_name_array.length;
     for (let i=0; i <length_array; i++) {
         collection_names[i] = collection_name_array[i]["name"];
     }
@@ -37,20 +47,14 @@ async function get_collection_names() {
 // Returns an array of seeds
 async function get_collection_data(col_name) {
     await db_client.connect().catch(err=>console.log(err));
-    const collection = db_client.db(db_name).collection(col_name);
+    const collection = db_client.db(DB_NAME).collection(col_name);
     const seed_array = await collection.find({}).toArray();
     return seed_array;
 }
   
 
 async function add_seed(emoji, name, price, quantity, select_type, url, store) {
-    console.log(emoji)
-    console.log(name)
-    console.log(price)
-    console.log(quantity)
-    console.log(select_type)
-    console.log(url)
-    console.log(store)
+
   const response = await notion.pages.create({
     "icon": {
         "type": "emoji",
@@ -86,9 +90,7 @@ async function add_seed(emoji, name, price, quantity, select_type, url, store) {
             }
         },
         "Link": {
-            "url": {
-                "url": url
-            }
+            "url": url
         },
         "Store": {
             "select": {
@@ -101,15 +103,31 @@ async function add_seed(emoji, name, price, quantity, select_type, url, store) {
 };
 
  function get_emoji(seed) {
-    const emoji_len = Object.keys(seed_emojis).length
+    const emoji_len = Object.keys(SEED_EMOJIS).length;
     seed = seed.toLowerCase();
 
     for (let i=0; i < emoji_len; i++) {
-        seed_type = Object.entries(seed_emojis)[i][0];
-        if (seed.includes(seed_type)) {
-            return [seed_type, seed_emojis[seed_type]];
+        seed_type = Object.entries(SEED_EMOJIS)[i][0];
+        if (seed.includes(seed_type.toLowerCase())) {
+            return [seed_type, SEED_EMOJIS[seed_type]];
         }
     }
+
+    // Check if it's an herb
+    for (let i=0; i < HERBS_LEN; i++) {
+        if (seed.includes(HERBS[i])) {
+            return ["Herb", "🌿"];
+        }
+    }
+
+    // Check if it's a leafy green
+    for (let i=0; i < LEAFY_GREENS_LEN; i++) {
+        if (seed.includes(LEAFY_GREENS[i])) {
+            return ["Green", "🥬"];
+        }
+    }
+
+
     return ["Other", "🌱"];
 }
 
@@ -121,8 +139,7 @@ async function query_db() {
     var data = []
     for (let i=0; i<names_len; i++) {
         const seeds = await get_collection_data(names[i]).catch(console.error);
-        // console.log(ans.length);
-        data = data.concat(seeds); // adds ans to the data array
+        data = data.concat(seeds); 
         
     }
     db_client.close();
@@ -131,28 +148,22 @@ async function query_db() {
     for (let i=0; i<total_seeds; i++) {
         name = data[i]["seed"];
         emoji = get_emoji(name);
-        // console.log(Object.entries(seed_emojis))
-        // console.log(name.toLowerCase().includes(seed_emojis))
-        // console.log(emoji[1])
-        // console.log(name)
-        // console.log(data[i]["price"])
-        // console.log(data[i]["qty"])
-        //console.log(emoji[0])
+
         price = data[i]["price"]
         if (typeof price == "string") {
-            price = parseInt(price)
+            price = parseFloat(price);
         }
 
         quantity = data[i]["qty"]
         if (typeof quantity == "string") {
-            quantity = parseInt(quantity)
+            quantity = parseFloat(quantity);
         }
 
-        url = data[i]["url"]
-        store = data[i]["store"]
+        url = data[i]["url"];
+        store = data[i]["store"];
         await add_seed(emoji[1], name, price, quantity, emoji[0], url, store);
     }
-    //console.log(Object.entries(seed_emojis)[0][0])
+
 }
 // add collection/website (where it comes from), make emoji[0] first letter uppercase,
 // add more vegetable support,  do quantity/price,  
