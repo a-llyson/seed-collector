@@ -77,5 +77,6 @@ class oscSpider(scrapy.Spider):
             'seed':  seed,
             'price': price,
             'qty': seed_qty,
-            'store': 'ontario seed company'
+            'store': 'ontario seed company',
+            'url': response.request.url,
         }

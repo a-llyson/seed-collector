@@ -69,5 +69,6 @@ class gaiaSpider(scrapy.Spider):
                 'seed':  seed,
                 'price': price,
                 'qty': seed_qty,
-                'store': "gaia"
+                'store': "gaia",
+                'url': response.request.url,
             }
