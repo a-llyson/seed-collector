@@ -43,12 +43,14 @@ async function get_collection_data(col_name) {
 }
   
 
-async function add_seed(emoji, name, price, quantity, select_type) {
+async function add_seed(emoji, name, price, quantity, select_type, url, store) {
     console.log(emoji)
     console.log(name)
     console.log(price)
     console.log(quantity)
     console.log(select_type)
+    console.log(url)
+    console.log(store)
   const response = await notion.pages.create({
     "icon": {
         "type": "emoji",
@@ -75,11 +77,24 @@ async function add_seed(emoji, name, price, quantity, select_type) {
         "Quantity": {
             "number": quantity
         },
+        "Price Per Seed": {
+            "number": price/quantity // in dollars 
+        },
         "Type": {
             "select": {
                 "name": select_type
             }
-        }
+        },
+        "Link": {
+            "url": {
+                "url": url
+            }
+        },
+        "Store": {
+            "select": {
+                "name": store
+            }
+        },
     },
 });
   console.log(response);
@@ -132,7 +147,10 @@ async function query_db() {
         if (typeof quantity == "string") {
             quantity = parseInt(quantity)
         }
-        await add_seed(emoji[1], name, price, quantity, emoji[0]);
+
+        url = data[i]["url"]
+        store = data[i]["store"]
+        await add_seed(emoji[1], name, price, quantity, emoji[0], url, store);
     }
     //console.log(Object.entries(seed_emojis)[0][0])
 }
