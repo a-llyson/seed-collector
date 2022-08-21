@@ -54,7 +54,8 @@ class heritageSpider(scrapy.Spider):
         
 
         # gets seed name and adds back ' and removes whitespace
-        seed = seed.rsplit('-', 1)[0].replace('\u2019', '\'').replace('\u2018', '\'').strip()
+        seed = seed.replace('\u2019', '\'').replace('\u2018', '\'').strip()
+        # seed = seed.rsplit('-', 1)[0].replace('\u2019', '\'').replace('\u2018', '\'').strip()
 
         # remove $, CAD and whitespace
         price = price.replace('$', '').strip()
@@ -67,6 +68,6 @@ class heritageSpider(scrapy.Spider):
             'seed':  seed,
             'price': price,
             'qty': seed_qty,
-            'store': 'heritage harvest seeds',
+            'store': 'Heritage Harvest Seeds',
             'url': response.request.url,
         }

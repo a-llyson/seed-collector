@@ -52,6 +52,6 @@ class gretaSpider(scrapy.Spider):
             'seed':  seed,
             'price': price,
             'qty': seed_qty,
-            'store': 'greta',
+            'store': 'Greta Family Gardens',
             'url': response.request.url,
         }
