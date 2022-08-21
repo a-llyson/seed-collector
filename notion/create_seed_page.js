@@ -40,7 +40,6 @@ async function get_collection_names() {
     for (let i=0; i <length_array; i++) {
         collection_names[i] = collection_name_array[i]["name"];
     }
-   // console.log(collection_names)
     return collection_names;
 }
 
@@ -86,8 +85,7 @@ async function add_seed(emoji, name, price, quantity, select_type, url, store) {
                     "content": quantity
                 }
             }
-            ]
-            
+            ]  
         },
         "Type": {
             "select": {
@@ -104,7 +102,6 @@ async function add_seed(emoji, name, price, quantity, select_type, url, store) {
         },
     },
 });
-//   console.log(response);
 };
 
  function get_emoji(seed) {
@@ -131,7 +128,6 @@ async function add_seed(emoji, name, price, quantity, select_type, url, store) {
             return ["Green", "🥬"];
         }
     }
-
 
     return ["Other", "🌱"];
 }
@@ -167,9 +163,4 @@ async function query_db() {
     }
 
 }
-// add collection/website (where it comes from), make emoji[0] first letter uppercase,
-// add more vegetable support,  do quantity/price,  
-
-// for scrapers, save url to item object and maybe website name
-// maybe for tags i should make the tag the website ??
 query_db();
